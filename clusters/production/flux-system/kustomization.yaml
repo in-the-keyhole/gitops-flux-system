@@ -3,4 +3,22 @@ kind: Kustomization
 resources:
 - gotk-components.yaml
 - gotk-sync.yaml
-- preprod-gotk-sync.yaml
+- preprod-gotk-sync.yaml # This is only here b/c we are running preprod (develop/staging) in the same cluster - otherwise, we would have boostrapped the cluster to create these Kustomizations
+patches:
+  - patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: all
+      spec:
+        template:
+          spec:
+            containers:
+              - name: manager
+                securityContext:
+                  runAsUser: 65534
+                  seccompProfile:
+                    $patch: delete      
+    target:
+      kind: Deployment
+      labelSelector: app.kubernetes.io/part-of=flux
