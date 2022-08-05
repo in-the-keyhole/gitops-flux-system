@@ -1,0 +1,16 @@
+# https://fluxcd.io/docs/components/kustomize/kustomization/
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: staging-infrastructure
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  dependsOn:
+    - name: production-infrastructure
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/staging
+  prune: true
+  wait: true
