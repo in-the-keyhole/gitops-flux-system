@@ -1,3 +1,18 @@
+# ClusterRoleBinding added for istio on Openshift -- see https://istio.io/latest/docs/setup/platform-setup/openshift/
+# equivalent to oc adm policy add-scc-to-group anyuid system:serviceaccounts:istio-system
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: 'system:openshift:scc:anyuid'
+subjects:
+  - kind: Group
+    apiGroup: rbac.authorization.k8s.io
+    name: 'system:serviceaccounts:istio-system'
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: 'system:openshift:scc:anyuid'
+---
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: HelmRepository
 metadata:
